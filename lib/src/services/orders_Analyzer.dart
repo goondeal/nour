@@ -15,20 +15,20 @@ class OrdersAnalyzer{
 
   }).toList();
   
-  Map<int, int> get productQuantity{
-    final Map<int, int> result = {};
-    orders.forEach((order) {
-      order.products.keys.forEach((productID) {
-        try{
-          result[productID] += order.products[productID][0];
-        }catch(e){
-           result[productID] = order.products[productID][0];
-        }
-        result[productID]??= result[productID] + order.products[productID][0]; 
-       });
-    });
-    return result;
-  }
+  // Map<int, int> get productQuantity{
+  //   final Map<int, int> result = {};
+  //   orders.forEach((order) {
+  //     order.products.keys.forEach((productID) {
+  //       try{
+  //         result[productID] += order.products[productID][0];
+  //       }catch(e){
+  //          result[productID] = order.products[productID][0];
+  //       }
+  //       result[productID]??= result[productID] + order.products[productID][0]; 
+  //      });
+  //   });
+  //   return result;
+  // }
 
   double get totalSpent => orders
   .map((order) => order.orderPrice)

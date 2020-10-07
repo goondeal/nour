@@ -3,16 +3,12 @@ import 'package:nour/src/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthFirestoreService {
+  AuthFirestoreService._();
+
   static final AuthFirestoreService _authFirestoreService =
       AuthFirestoreService._();
 
-  factory AuthFirestoreService() {
-    return _authFirestoreService;
-  }
-
-  // Private constructor.
-  AuthFirestoreService._();
-
+  factory AuthFirestoreService() => _authFirestoreService;
 
   void saveUser(FirebaseUser user) async {
     final docRef = FirestoreService().refFrom(USERS_COLLECTION, user.uid);
