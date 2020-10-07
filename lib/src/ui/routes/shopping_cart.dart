@@ -81,7 +81,7 @@ class _ShoppingCartPageState extends State<ShoppingCartPage> {
 Future<void> _sendOrder(AppStateModel model)async{
   final user = Provider.of<User>(context);
   final order = Order(
-    products: model.productsToOrder(),
+    products: model.productsToOrder,
     orderTime: DateTime.now().millisecondsSinceEpoch,
     doctor: user.id,
     state: OrderState.INIT,

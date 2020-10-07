@@ -17,12 +17,12 @@ class OrderLayout extends StatelessWidget {
   OrderLayout({this.order, Key key}) : super(key: key);
 
   List<Widget> _createShoppingCartRows(AppStateModel model) {
-    return order.products.keys
+    return order.products
         .map(
-          (k) => ShoppingCartRow(
-            product: model.getProductById(k),
-            quantity: order.products[k].first,
-            price: order.products[k].last,
+          (ProductDetails pd) => ShoppingCartRow(
+            product: model.getProductById(pd.id),
+            quantity: pd.quantity,
+            price: pd.price,
           ),
         ).toList();
   }

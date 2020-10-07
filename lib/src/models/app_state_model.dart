@@ -1,47 +1,51 @@
-import 'package:nour/src/models/products_repository.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show ChangeNotifier;
+import 'package:nour/src/models/order.dart';
+
 import 'package:nour/src/models/product.dart';
+import 'package:nour/src/models/products_repository.dart';
 
+// double _salesTaxRate = 0.0;
+// double _shippingCostPerItem = 0.0;
 
-double _salesTaxRate = 1; // 0.06;
-double _shippingCostPerItem = 1; // 7.0;
-
-class AppStateModel extends ChangeNotifier{
-  // All the available products.
+class AppStateModel extends ChangeNotifier {
+  /// All the available products.
   List<Product> _availableProducts;
 
-  // The currently selected category of products.
+  /// The currently selected category of products.
   Category _selectedCategory = Category.all;
 
-  // The IDs and quantities of products currently in the cart.
+  Category get selectedCategory => _selectedCategory;
+
+  /// The IDs and quantities of products currently in the cart.
+  /// {id: quantity}
   final Map<int, int> _productsInCart = <int, int>{};
 
   Map<int, int> get productsInCart => Map<int, int>.from(_productsInCart);
 
-  // Total number of items in the cart.
-  int get totalCartQuantity => _productsInCart.values.fold(0, (int v, int e) => v + e);
+  /// Total number of items in the cart (The absolute quantity).
+  int get totalCartQuantity =>
+      _productsInCart.values.fold(0, (int v, int e) => v + e);
 
-  Category get selectedCategory => _selectedCategory;
-
-  // Totaled prices of the items in the cart.
+  /// Return the total prices of the items in the cart.
   double get subtotalCost {
     return _productsInCart.keys
-      .map((int id) => _availableProducts[id].price * _productsInCart[id])
-      .fold(0.0, (double sum, double e) => sum + e);
+        .map((int id) => _availableProducts[id].price * _productsInCart[id])
+        .fold(0.0, (double sum, double e) => sum + e);
   }
 
-  // Total shipping cost for the items in the cart.
+  /// Total shipping cost for the items in the cart.
   double get shippingCost {
-    return _shippingCostPerItem * _productsInCart.values.fold(0.0, (num sum, int e) => sum + e);
+    return 0.0;
+    //_shippingCostPerItem * _productsInCart.values.fold(0.0, (num sum, int e) => sum + e);
   }
 
-  // Sales tax for the items in the cart
-  double get tax => subtotalCost * _salesTaxRate;
+  /// Sales tax for the items in the cart.
+  double get tax => 0.0; //subtotalCost * _salesTaxRate;
 
-  // Total cost to order everything in the cart.
+  /// Total cost to order everything in the cart.
   double get totalCost => subtotalCost + shippingCost + tax;
 
-  // Returns a copy of the list of available products, filtered by category.
+  /// Returns a copy of the list of available products, filtered by category.
   List<Product> getProducts() {
     if (_availableProducts == null) {
       return <Product>[];
@@ -51,12 +55,12 @@ class AppStateModel extends ChangeNotifier{
       return List<Product>.from(_availableProducts);
     } else {
       return _availableProducts
-        .where((Product p) => p.category == _selectedCategory)
-        .toList();
+          .where((Product p) => p.category == _selectedCategory)
+          .toList();
     }
   }
 
-  // Adds a product to the cart.
+  /// Adds a product to the cart and notify listners.
   void addProductToCart(int productId) {
     if (!_productsInCart.containsKey(productId)) {
       _productsInCart[productId] = 1;
@@ -66,7 +70,7 @@ class AppStateModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  // Removes an item from the cart.
+  /// Removes an item from the cart and notify listners.
   void removeItemFromCart(int productId) {
     if (_productsInCart.containsKey(productId)) {
       if (_productsInCart[productId] == 1) {
@@ -78,35 +82,40 @@ class AppStateModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  // Returns the Product instance matching the provided id.
+  /// Returns the Product instance matching the provided id.
+  /// TODO: Optimize
   Product getProductById(int id) {
     return _availableProducts.firstWhere((Product p) => p.id == id);
   }
 
-  // Removes everything from the cart.
+  /// Removes everything from the cart and notify listners.
   void clearCart() {
     _productsInCart.clear();
     notifyListeners();
   }
 
-  // Loads the list of available products from the repo.
+  /// Loads the list of available products from the repo.
   void loadProducts() {
     _availableProducts = ProductsRepository.loadProducts(Category.all);
     notifyListeners();
   }
 
+  /// Updates the category type.
   void setCategory(Category newCategory) {
     _selectedCategory = newCategory;
     notifyListeners();
   }
 
-  Map<int, List<num>> productsToOrder(){
-    Map<int, List<num>> products = {};
-    productsInCart.forEach(
-    (key, value) {products[key] = [value, getProductById(key).salePrice ?? getProductById(key).price];}
-  );
-  return products;
-  }
+  List<ProductDetails> get productsToOrder => productsInCart.entries
+      .map(
+        (e) => ProductDetails(
+            id: e.key,
+            quantity: e.value,
+            price:
+                getProductById(e.key).salePrice ?? getProductById(e.key).price),
+      )
+      .toList();
+
 
   @override
   String toString() {
