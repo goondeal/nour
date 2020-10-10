@@ -13,16 +13,14 @@ class ProductDetails {
 
   ProductDetails.fromData(MapEntry<String, dynamic> mapEntry)
       : id = int.parse(mapEntry.key),
-        quantity = int.parse(mapEntry.value.first),
-        price = double.parse(mapEntry.value.last);
+        quantity = mapEntry.value.first,
+        price = mapEntry.value.last;
 
   MapEntry<String, dynamic> get toData =>
       MapEntry(id.toString(), [quantity, price]);
 }
 
 class Order {
-  // ex: [productX.id, quantity, price_when_order_requested]
-  // final Map<int, List<num>> products;
   final List<ProductDetails> products;
   final int orderTime; // MillisecondsSinceEpoch
   final String doctor;
@@ -59,7 +57,8 @@ class Order {
   Order.fromMap(Map<String, dynamic> data)
       : products = (Map<String, dynamic>.from(data['products']))
             .entries
-            .map((e) => ProductDetails.fromData(e)),
+            .map<ProductDetails>((e) => ProductDetails.fromData(e))
+            .toList(),
         // products = (Map<String, dynamic>.from(data['products'])).map(
         //       (key, value) => MapEntry(int.parse(key), List<num>.from(value))),
         orderTime = data['orderTime'],
@@ -73,21 +72,21 @@ class Order {
   //String get orderPath => orderDateTime.toUtc().toString().split(' ')[0].replaceAll('-', '/');
 
   Map<String, dynamic> get toMap => {
-      'doctor': doctor,
-      'orderTime': orderTime,
-      'products': Map<String, dynamic>.fromEntries(products.map((e) => e.toData)),
-      'state': state.toString().split('.').last,
-    };
-  
-    // final Map<String, dynamic> tmp = {
-    //   'doctor': doctor,
-    //   'orderTime': orderTime,
-    //   'products': Map<String, dynamic>.fromEntries(products.map((e) => e.toData)),
-    //   'state': state.toString().split('.').last,
-    // };
-    // tmp.addAll({'products': products.map((k, v) => MapEntry(k.toString(), v))});
-    // return tmp;
-  
+        'doctor': doctor,
+        'orderTime': orderTime,
+        'products':
+            Map<String, dynamic>.fromEntries(products.map((e) => e.toData)),
+        'state': state.toString().split('.').last,
+      };
+
+  // final Map<String, dynamic> tmp = {
+  //   'doctor': doctor,
+  //   'orderTime': orderTime,
+  //   'products': Map<String, dynamic>.fromEntries(products.map((e) => e.toData)),
+  //   'state': state.toString().split('.').last,
+  // };
+  // tmp.addAll({'products': products.map((k, v) => MapEntry(k.toString(), v))});
+  // return tmp;
 
   String get orderID => '${doctor}_$orderTime';
 }

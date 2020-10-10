@@ -108,9 +108,6 @@ ThemeData _buildTheme() {
       textTheme: ButtonTextTheme.normal,
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: kNourBlack),
-    // inputDecorationTheme: InputDecorationTheme(
-
-    // ),
     textTheme: _buildShrineTextTheme(base.textTheme),
     primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),
     accentTextTheme: _buildShrineTextTheme(base.accentTextTheme),
