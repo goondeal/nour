@@ -1,7 +1,6 @@
-//import 'package:equatable/equatable.dart';
 
 class User {
-  //extends Equatable {
+  
   final String id;
   String username;
   String photoUrl;
@@ -26,15 +25,6 @@ class User {
         photoUrl = data['photoUrl'] ?? 'null',
         phoneNumber = data['phoneNumber'] ?? 'null',
         joinedSince = data['joinedSince'] ?? 0;
-
-  // @override
-  // List<Object> get props => [
-  //       this.id,
-  //       this.username,
-  //       this.email,
-  //       this.photoUrl,
-  //       this.phoneNumber,
-  //     ];
 
       
   User copyWith({
