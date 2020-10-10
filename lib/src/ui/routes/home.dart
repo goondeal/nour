@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:nour/src/ui/widgets/search_bar.dart';
-
 import 'package:provider/provider.dart';
 
+import 'package:nour/src/ui/widgets/search_bar.dart';
 import 'package:nour/src/ui/routes/expanding_bottom_sheet.dart';
 import 'package:nour/src/models/app_state_model.dart';
 import 'package:nour/src/models/product.dart';
 import 'package:nour/src/models/products_repository.dart';
 import 'package:nour/src/ui/widgets/drawer.dart';
 import 'package:nour/src/ui/widgets/product_card.dart';
+
 
 class Home extends StatefulWidget {
   @override
@@ -17,14 +17,14 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  AnimationController _controller;
-  String _text;
+  AnimationController _animationController;
+  String _searchText;
   bool _searchIconClicked = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 450),
       value: 1.0,
@@ -33,7 +33,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -59,10 +59,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         ),
         title: _searchIconClicked
             ? SearchBar(
-                controller: null,
                 onTextChanged: (text) {
                   setState(() {
-                    _text = text;
+                    _searchText = text;
                   });
                 },
               )
@@ -101,7 +100,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 .toList(),
           ),
           Align(
-            child: ExpandingBottomSheet(hideController: _controller),
+            child: ExpandingBottomSheet(hideController: _animationController),
             alignment: Alignment.bottomRight,
           ),
         ],
@@ -110,9 +109,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   _filterCondition(String productName) {
-    if (_text == null) {
+    if (_searchText == null) {
       return true;
     }
-    return productName.toLowerCase().contains(_text?.toLowerCase());
+    return productName.toLowerCase().contains(_searchText?.toLowerCase());
   }
 }

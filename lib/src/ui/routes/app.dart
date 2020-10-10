@@ -44,9 +44,7 @@ class _NourAppState extends State<NourApp> {
               photoUrl: 'null',
               username: 'username',
             ),
-            value: userRepository != null && userRepository.user != null
-                ? AuthFirestoreService().getUser(userRepository.user?.uid)
-                : null,
+            value: AuthFirestoreService().getUser(userRepository?.user?.uid),
             child: MaterialApp(
               title: 'Nour',
               theme: _kNourTheme,
@@ -111,7 +109,7 @@ ThemeData _buildTheme() {
     ),
     primaryIconTheme: base.iconTheme.copyWith(color: kNourBlack),
     // inputDecorationTheme: InputDecorationTheme(
-    //   border: CutCornersBorder(),
+
     // ),
     textTheme: _buildShrineTextTheme(base.textTheme),
     primaryTextTheme: _buildShrineTextTheme(base.primaryTextTheme),
