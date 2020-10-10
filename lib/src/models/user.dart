@@ -37,7 +37,7 @@ class User {
   //     ];
 
       
-  copyWith({
+  User copyWith({
     String username,
     String email,
     String photoUrl,

@@ -33,7 +33,9 @@ class AuthFirestoreService {
   }
 
   Stream<User> getUser(String uid) {
-    return FirestoreService()
+    return uid == null 
+    ? null 
+    : FirestoreService()
         .getDocumentSnapshot(USERS_COLLECTION, uid)
         .map((doc) => User.fromMap(doc.data ?? {}));
   }
