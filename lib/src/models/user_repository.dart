@@ -2,7 +2,7 @@ import 'package:nour/src/services/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show ChangeNotifier;
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
@@ -47,7 +47,6 @@ class UserRepository with ChangeNotifier {
   void _keepLoggedIn() => _setLoggedInTo(true);
   void _cancelKeepLoggedIn() => _setLoggedInTo(false);
 
-
   void notifyAfter(List<List<dynamic>> functionsWithParameters) {
     functionsWithParameters.forEach((functionWithParameter) {
       // For void Functions
@@ -63,7 +62,10 @@ class UserRepository with ChangeNotifier {
 
   Future<FirebaseUser> _handleSignIn() async {
     notifyAfter([
-      [setStatus, [Status.Authenticating] ]
+      [
+        setStatus,
+        [Status.Authenticating]
+      ]
     ]);
     //setStatus(Status.Authenticating);
 
@@ -96,7 +98,10 @@ class UserRepository with ChangeNotifier {
       AuthFirestoreService().saveUser(user);
       notifyAfter([
         [_keepLoggedIn],
-        [setStatus, [Status.Authenticated] ]
+        [
+          setStatus,
+          [Status.Authenticated]
+        ]
       ]);
       // _keepLoggedIn();
       // setStatus(Status.Authenticated);
@@ -105,7 +110,10 @@ class UserRepository with ChangeNotifier {
       print(e);
       error = e.message;
       notifyAfter([
-        [setStatus, [Status.Unauthenticated] ],
+        [
+          setStatus,
+          [Status.Unauthenticated]
+        ],
         [_cancelKeepLoggedIn],
       ]);
       // setStatus(Status.Unauthenticated);

@@ -25,8 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
     print(_user == _userWithNewFeatures);
     print(_userWithNewFeatures.phoneNumber);
     _usernameController = TextEditingController(text: _user.username);
-    _phoneNumberController =
-        TextEditingController();
+    _phoneNumberController = TextEditingController();
   }
 
   @override
@@ -62,8 +61,6 @@ class _ProfilePageState extends State<ProfilePage> {
           children: <Widget>[
             SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
                     width: double.infinity,
@@ -75,21 +72,24 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: CircleAvatar(
                             radius: 48,
                             backgroundColor: lgc1,
-                            child: CircleAvatar(
-                              radius: 42,
-                              backgroundImage:
-                                  CachedNetworkImageProvider(_user.photoUrl),
-                              child: Align(
-                                alignment: Alignment(2.3, 2.3),
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: lgc1,
+                            child: _user.photoUrl == null
+                                ? Icon(Icons.person)
+                                : CircleAvatar(
+                                    radius: 42,
+                                    backgroundImage: CachedNetworkImageProvider(
+                                      _user.photoUrl,
+                                    ),
+                                    child: Align(
+                                      alignment: Alignment(2.3, 2.3),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.add_a_photo,
+                                          color: lgc1,
+                                        ),
+                                        onPressed: () {},
+                                      ),
+                                    ),
                                   ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
                           ),
                         ),
                         Row(
@@ -189,12 +189,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                   maxLength: 11,
                                   textAlign: TextAlign.center,
                                   keyboardType: TextInputType.phone,
-                                  
                                   onChanged: (text) {},
                                   onSubmitted: (text) {
                                     setState(() {
-                                      if (_isValidPhoneNumber(
-                                          text)) {
+                                      if (_isValidPhoneNumber(text)) {
                                         _userWithNewFeatures.phoneNumber = text;
                                       }
                                       _editPhoneNumber = false;
@@ -202,9 +200,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                   },
                                 )
                               : Text(
-                                  _userWithNewFeatures.phoneNumber??
-                                   '0000 000 0000'
-                                   ,
+                                  _userWithNewFeatures.phoneNumber ??
+                                      '0000 000 0000',
                                   style: TextStyle(
                                     fontSize: 18,
                                   ),
@@ -313,12 +310,10 @@ class _ProfilePageState extends State<ProfilePage> {
       final s = text[text.length - 1];
       int tmp = int.parse(s);
       return text.length >= 10 &&
-        List<int>.generate(10, (i) => i, growable: false).contains(int.parse(s));
+          List<int>.generate(10, (i) => i, growable: false)
+              .contains(int.parse(s));
     } catch (e) {
       return false;
     }
-    
-    
-    
   }
 }

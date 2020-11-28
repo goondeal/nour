@@ -14,6 +14,7 @@ class NourApp extends StatefulWidget {
   State<NourApp> createState() => _NourAppState();
 }
 
+
 class _NourAppState extends State<NourApp> {
   AppStateModel model;
 
@@ -52,7 +53,7 @@ class _NourAppState extends State<NourApp> {
                   userRepository.keepedLoggedIn ? Home() : const AuthWrapper(),
             ),
           ),
-        ));
+        ),);
 
     //   child: MaterialApp(
     //     title: 'Nour',
