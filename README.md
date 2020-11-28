@@ -9,7 +9,7 @@ On progress...
 ## Screenshots
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-|<img width="720" alt="add_products_to_cart" src="/screenshots/add_products_to_cart.jpg">|
+|<img width="720" alt="add_products_to_cart" src="/screenshots/add_products_to_cart.jpg"> x |
 
 |<img width="720" alt="add_products_to_cart2" src="/screenshots/add_products_to_cart2.jpg">|
 
