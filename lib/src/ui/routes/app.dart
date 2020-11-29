@@ -48,6 +48,7 @@ class _NourAppState extends State<NourApp> {
             value: AuthFirestoreService().getUser(userRepository?.user?.uid),
             child: MaterialApp(
               title: 'Nour',
+              debugShowCheckedModeBanner: false,
               theme: _kNourTheme,
               home:
                   userRepository.keepedLoggedIn ? Home() : const AuthWrapper(),
