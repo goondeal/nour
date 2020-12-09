@@ -1,6 +1,6 @@
 # nour
 
-A mobile application with flutter and firebase for an Egyptian startup supplies dentists with dental kits and appliences.
+A mobile application built with flutter and firebase for an Egyptian startup supplies dentists with dental kits and appliances.
 
 ## Features
 
