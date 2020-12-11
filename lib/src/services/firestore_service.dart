@@ -6,6 +6,7 @@ const String USERS_COLLECTION = 'doctors';
 const String PRODUCTS_COLLECTION = 'products';
 
 class FirestoreService {
+  // Singleton.
   FirestoreService._();
   static final _firestoreService = FirestoreService._();
 
@@ -13,7 +14,32 @@ class FirestoreService {
     return _firestoreService;
   }
 
+  /// Firestore instance.
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+
+  /*------------------------- Atomic Functions ------------------------- */
+
+  /// Creates a new document at this [doPath] and 
+  /// writes the provided [data] in it.    
+  Future<void> _createDocument(String docPath, Map<String, dynamic> data) {
+    return _db.doc(docPath).set(data);
+  }
+
+  /// Updates the document at this [docPath] with the new [data].
+  Future<void> _updateDocument(String docPath, Map<String, dynamic> data) {
+    return _db.doc(docPath).update(data);
+  }
+
+  /// Get the snapshot of the document at this [docPath].
+  Future<DocumentSnapshot> _getDocument(String docPath) {
+    return _db.doc(docPath).get();
+  }
+
+  /// Get all documents in this [collectionPath].
+  Stream<QuerySnapshot> _getAllDocuments(String collectionPath) {
+    return _db.collection(collectionPath).snapshots();
+  }
 
   /// Get the products from firestore.
   Stream<QuerySnapshot> getProducts() {
@@ -21,19 +47,15 @@ class FirestoreService {
   }
 
   /// Set the order state or change it.
-  void setOrderStateTo(Order order, OrderState newState) {
-    updateDocument(
-      '$USERS_COLLECTION/${order.doctor}/$ORDERS_COLLECTION',
-      order.orderID,
-      {'state': newState.toString().split('.').last},
-    ).then((value) => print('order state set to $newState'));
+  Future<void> setOrderStateTo(Order order, String newState) {
+    // Update the order with the new state.
+    return _updateDocument(order.path, {'state': newState});
   }
 
-  /// Write order to the database.
+  /// Adds a new order in the database.
   Future<void> addOrder(Order order) {
-    final path =
-        '$USERS_COLLECTION/${order.doctor}/$ORDERS_COLLECTION/${order.orderID}';
-    return _db.doc(path).set(order.toMap);
+    // Create a new document with the order's info.
+    return _createDocument(order.path, order.toMap);
   }
 
   /// A function that returns the orders for a specific user
@@ -49,33 +71,24 @@ class FirestoreService {
         .snapshots();
   }
 
-  /// Read a document from the database.
-  Stream<DocumentSnapshot> getDocumentSnapshot(String path, String id) {
-    return _db.collection(path).doc(id).snapshots();
+  /// Get user by [id].
+  Stream<DocumentSnapshot> getUser(String id) {
+    return _db.collection(USERS_COLLECTION).doc(id).snapshots();
   }
 
-  /// Add new document to the datbase.
-  Future<void> addDocument(String path, String id, Map<String, dynamic> data) {
-    return _db.collection(path).doc(id).set(data);
+  /// Adds a new user in the datbase.
+  Future<void> addNewUser(String id, Map<String, dynamic> data) {
+    // The user path.
+    final path = '$USERS_COLLECTION/$id';
+    // Add to the database.
+    return _createDocument(path, data);
   }
 
-  /// Update a document in the database.
-  Future<void> updateDocument(String path, String id, Map<String, dynamic> data,
-      {bool merge = true}) {
-    return _db.collection(path).doc(id).set(data);
-  }
 
-  // Future<void> updateDocumentFieldValue(
-  //     String path, String id, String field, List<String> elements) {
-  //   final docRef = _db.collection(path).doc(id);
+  // // DocumentReference refFrom(String path, String id) =>
+  // //     _db.collection(path).doc(id);
 
-  //   return docRef.updateData({field: FieldValue.arrayUnion(elements)});
-  // }
-
-  DocumentReference refFrom(String path, String id) =>
-      _db.collection(path).doc(id);
-
-  /// Check if a document exists.
-  Future<bool> isDocExists(DocumentReference ref) =>
-      ref.get().then((snapshot) => snapshot.exists);
+  // /// Check if a document exists.
+  // Future<bool> isDocExists(DocumentReference ref) =>
+  //     ref.get().then((snapshot) => snapshot.exists);
 }
