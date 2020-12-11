@@ -6,7 +6,6 @@ const String USERS_COLLECTION = 'doctors';
 const String PRODUCTS_COLLECTION = 'products';
 
 class FirestoreService {
-
   FirestoreService._();
   static final _firestoreService = FirestoreService._();
 
@@ -14,10 +13,9 @@ class FirestoreService {
     return _firestoreService;
   }
 
-  Firestore _db = Firestore.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-
-  /// Read products from the database.
+  /// Get the products from firestore.
   Stream<QuerySnapshot> getProducts() {
     return _db.collection(PRODUCTS_COLLECTION).snapshots();
   }
@@ -33,14 +31,16 @@ class FirestoreService {
 
   /// Write order to the database.
   Future<void> addOrder(Order order) {
-    final path = '$USERS_COLLECTION/${order.doctor}/$ORDERS_COLLECTION/${order.orderID}';
-    return _db.document(path).setData(order.toMap);
+    final path =
+        '$USERS_COLLECTION/${order.doctor}/$ORDERS_COLLECTION/${order.orderID}';
+    return _db.doc(path).set(order.toMap);
   }
 
   /// A function that returns the orders for a specific user
   /// the result stream is controlled by a start and final dates to fetch
   ///  the orders in between.
-  Stream<QuerySnapshot> getOrdersFor({String uid, int startDate, int finalDate} ) {
+  Stream<QuerySnapshot> getOrdersFor(
+      {String uid, int startDate, int finalDate}) {
     final path = '$USERS_COLLECTION/$uid/$ORDERS_COLLECTION';
     return _db
         .collection(path)
@@ -49,31 +49,31 @@ class FirestoreService {
         .snapshots();
   }
 
-  /// Read a document from the database.  
+  /// Read a document from the database.
   Stream<DocumentSnapshot> getDocumentSnapshot(String path, String id) {
-    return _db.collection(path).document(id).snapshots(); 
+    return _db.collection(path).doc(id).snapshots();
   }
 
   /// Add new document to the datbase.
   Future<void> addDocument(String path, String id, Map<String, dynamic> data) {
-    return _db.collection(path).document(id).setData(data);
+    return _db.collection(path).doc(id).set(data);
   }
 
   /// Update a document in the database.
   Future<void> updateDocument(String path, String id, Map<String, dynamic> data,
       {bool merge = true}) {
-    return _db.collection(path).document(id).setData(data, merge: merge);
+    return _db.collection(path).doc(id).set(data);
   }
 
   // Future<void> updateDocumentFieldValue(
   //     String path, String id, String field, List<String> elements) {
-  //   final docRef = _db.collection(path).document(id);
+  //   final docRef = _db.collection(path).doc(id);
 
   //   return docRef.updateData({field: FieldValue.arrayUnion(elements)});
   // }
 
   DocumentReference refFrom(String path, String id) =>
-      _db.collection(path).document(id);
+      _db.collection(path).doc(id);
 
   /// Check if a document exists.
   Future<bool> isDocExists(DocumentReference ref) =>

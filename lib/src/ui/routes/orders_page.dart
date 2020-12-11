@@ -51,8 +51,8 @@ class _OrdersPageState extends State<OrdersPage> {
           ),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final data = snapshot.data.documents
-                  .map((docSnapshot) => docSnapshot.data)
+              final data = snapshot.data.docs
+                  .map((docSnapshot) => docSnapshot.data())
                   .toList();
 
               data.sort((a, b) =>

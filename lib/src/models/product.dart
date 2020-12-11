@@ -10,7 +10,7 @@ class Product {
   final double salePrice;
 
   /// TODO: Delete [isFeatured] after adding the real products to the database.
-  /// and it's here only for the mocked data;
+  /// it's here only for the mocked data;
   final bool isFeatured;
 
   const Product({

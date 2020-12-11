@@ -1,4 +1,4 @@
-import 'package:nour/src/models/user.dart';
+import 'package:nour/src/models/user.dart' as models;
 import 'package:nour/src/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,7 +10,7 @@ class AuthFirestoreService {
 
   factory AuthFirestoreService() => _authFirestoreService;
 
-  void saveUser(FirebaseUser user) async {
+  void saveUser(User user) async {
     final docRef = FirestoreService().refFrom(USERS_COLLECTION, user.uid);
     final doctorExists = await FirestoreService().isDocExists(docRef);
 
@@ -23,7 +23,7 @@ class AuthFirestoreService {
           {
             "id": user.uid,
             "username": user.displayName,
-            "photoUrl": user.photoUrl,
+            "photoUrl": user.photoURL,
             "email": user.email,
             "phoneNumber": user.phoneNumber,
             "joinedSince": DateTime.now().millisecondsSinceEpoch,
@@ -32,11 +32,11 @@ class AuthFirestoreService {
     print('user exists');
   }
 
-  Stream<User> getUser(String uid) {
-    return uid == null 
-    ? null 
-    : FirestoreService()
-        .getDocumentSnapshot(USERS_COLLECTION, uid)
-        .map((doc) => User.fromMap(doc.data ?? {}));
+  Stream<models.User> getUser(String uid) {
+    return uid == null
+        ? null
+        : FirestoreService()
+            .getDocumentSnapshot(USERS_COLLECTION, uid)
+            .map((doc) => models.User.fromMap(doc.data ?? {}));
   }
 }

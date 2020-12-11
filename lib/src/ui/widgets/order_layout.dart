@@ -8,7 +8,6 @@ import 'package:nour/src/models/app_state_model.dart';
 import 'package:nour/src/models/order.dart';
 import 'package:nour/src/models/product.dart';
 
-
 const double _leftColumnWidth = 60.0;
 
 class OrderLayout extends StatelessWidget {
@@ -24,7 +23,8 @@ class OrderLayout extends StatelessWidget {
             quantity: pd.quantity,
             price: pd.price,
           ),
-        ).toList();
+        )
+        .toList();
   }
 
   @override

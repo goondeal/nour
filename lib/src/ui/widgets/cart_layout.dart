@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 const double _leftColumnWidth = 60.0;
 
 class CartLayout extends StatelessWidget {
-  final AppStateModel model ;
-  
+  final AppStateModel model;
+
   CartLayout({this.model, Key key}) : super(key: key);
 
   List<Widget> _createShoppingCartRows(AppStateModel model) {
@@ -21,13 +21,14 @@ class CartLayout extends StatelessWidget {
             quantity: model.productsInCart[k],
             onPressed: () => model.removeItemFromCart(k),
           ),
-        ).toList();
+        )
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final ThemeData localTheme = Theme.of(context);
-    final model = Provider.of<AppStateModel>(context); 
+    final model = Provider.of<AppStateModel>(context);
     return ListView(
       children: <Widget>[
         Row(
@@ -74,7 +75,6 @@ class ShoppingCartSummary extends StatelessWidget {
 
     return Row(
       children: <Widget>[
-
         const SizedBox(width: _leftColumnWidth),
         Expanded(
           child: Padding(
@@ -94,7 +94,6 @@ class ShoppingCartSummary extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16.0),
-                
               ],
             ),
           ),

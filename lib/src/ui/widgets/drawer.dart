@@ -12,7 +12,6 @@ import 'package:nour/src/ui/routes/orders_page.dart';
 import 'package:nour/src/ui/res/colors.dart';
 import 'package:nour/src/ui/widgets/oval_clipper.dart';
 
-
 class HomeDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
