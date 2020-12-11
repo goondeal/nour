@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nour/src/services/auth.dart';
 
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,7 +8,6 @@ import 'package:nour/src/ui/routes/profile_page.dart';
 import 'package:nour/src/models/app_state_model.dart';
 import 'package:nour/src/models/product.dart';
 import 'package:nour/src/models/user.dart';
-import 'package:nour/src/models/user_repository.dart';
 import 'package:nour/src/ui/routes/orders_page.dart';
 import 'package:nour/src/ui/res/colors.dart';
 import 'package:nour/src/ui/widgets/oval_clipper.dart';
@@ -43,7 +43,7 @@ class HomeDrawer extends StatelessWidget {
                   //       color: active,
                   //     ),
                   //     onPressed: () async {
-                  //       await Provider.of<UserRepository>(context).signOut();
+                  //       await Provider.of<AuthService>(context).signOut();
                   //     },
                   //   ),
                   // ),
@@ -139,7 +139,7 @@ class HomeDrawer extends StatelessWidget {
                     Icons.exit_to_app,
                     'Log Out',
                     () async =>
-                        await Provider.of<UserRepository>(context).signOut(),
+                        await Provider.of<AuthService>(context).signOut(),
                   ),
                   SizedBox(height: 16.0),
                 ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nour/src/services/firestore_service.dart';
 
 import 'package:provider/provider.dart';
 import 'package:nour/src/ui/res/colors.dart';
@@ -27,15 +28,15 @@ class _NourAppState extends State<NourApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<UserRepository>(
-            create: (context) => UserRepository.instance(),
+          ChangeNotifierProvider<AuthService>(
+            create: (context) => AuthService(),
           ),
           ChangeNotifierProvider<AppStateModel>(
             create: (context) => model,
           ),
         ],
-        child: Consumer<UserRepository>(
-          builder: (_, UserRepository userRepository, __) =>
+        child: Consumer<AuthService>(
+          builder: (_, AuthService auth, __) =>
               StreamProvider<User>.value(
             initialData: User(
               email: 'email',
@@ -45,13 +46,12 @@ class _NourAppState extends State<NourApp> {
               photoUrl: 'null',
               username: 'username',
             ),
-            value: AuthFirestoreService().getUser(userRepository?.user?.uid),
+            value: auth.appUser,
             child: MaterialApp(
               title: 'Nour',
               debugShowCheckedModeBanner: false,
               theme: _kNourTheme,
-              home:
-                  userRepository.keepedLoggedIn ? Home() : const AuthWrapper(),
+              home: auth.user != null ? Home() : const AuthWrapper(),
             ),
           ),
         ),);
@@ -62,8 +62,8 @@ class _NourAppState extends State<NourApp> {
     //     // routes: <String, WidgetBuilder>{
     //     //  '${OrdersPage.routeName}' : (BuildContext context) => OrdersPage(),
     //     //  },
-    //     home: Consumer<UserRepository>(
-    //       builder: (BuildContext context, UserRepository userRepository, _){
+    //     home: Consumer<AuthService>(
+    //       builder: (BuildContext context, AuthService userRepository, _){
     //         return StreamProvider<User>(
 
     //             //updateShouldNotify: (user, newUser) => user != newUser,

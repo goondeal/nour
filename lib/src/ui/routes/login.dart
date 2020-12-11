@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'package:font_awesome_flutter/fa_icon.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:nour/src/services/auth.dart';
 import 'package:nour/src/ui/res/colors.dart';
 
 import 'package:provider/provider.dart';
@@ -17,7 +18,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRepository>(context);
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -82,7 +82,7 @@ class LoginPage extends StatelessWidget {
                             color: Colors.white,
                           ),
                           onPressed: () async {
-                            if (!await user.signInWithGoogle()) {
+                            if (!await AuthService().signInWithGoogle()) {
                             //   showBottomSheet(
                             //     context: context,
                             //     builder: (BuildContext context) {

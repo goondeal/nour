@@ -1,3 +1,4 @@
+import 'package:nour/src/services/auth.dart';
 import 'package:nour/src/ui/routes/home.dart';
 import 'package:nour/src/ui/routes/login.dart';
 import 'package:nour/src/models/user_repository.dart';
@@ -10,9 +11,9 @@ class AuthWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserRepository>(
-      builder: (BuildContext context, UserRepository user, _){
-        switch (user.status) {
+    return Consumer<AuthService>(
+      builder: (BuildContext context, AuthService auth, _){
+        switch (auth.status) {
           case Status.Uninitialized:
             return LandingPage();
           case Status.Authenticating:

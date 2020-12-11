@@ -87,7 +87,7 @@ Future<void> _sendOrder(AppStateModel model)async{
     state: OrderState.INIT,
   );
   FirestoreService().addOrder(order).then(
-    (value) => FirestoreService().setOrderStateTo(order, OrderState.SENT),
+    (value) => FirestoreService().setOrderStateTo(order, OrderState.SENT.toString().split('.').last),
     );
 }
   Widget _prettyButton(AppStateModel model, String text, Function action) {

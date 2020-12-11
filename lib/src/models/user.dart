@@ -19,12 +19,12 @@ class User {
   });
 
   User.fromMap(Map<String, dynamic> data)
-      : id = data['id'] ?? 'null',
-        username = data['username'] ?? 'null',
-        email = data['email'] ?? 'null',
-        photoUrl = data['photoUrl'] ?? 'null',
-        phoneNumber = data['phoneNumber'] ?? 'null',
-        joinedSince = data['joinedSince'] ?? 0;
+      : id = data['id'],
+        username = data['username'],
+        email = data['email'],
+        photoUrl = data['photoUrl'],
+        phoneNumber = data['phoneNumber'],
+        joinedSince = data['joinedSince'];
 
       
   User copyWith({

@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:nour/src/services/firestore_service.dart' show USERS_COLLECTION, ORDERS_COLLECTION;
 
 enum OrderState { INIT, SENT, SEEN, DELIVERED }
 
@@ -21,9 +22,16 @@ class ProductDetails {
 }
 
 class Order {
+  /// Product details foreach product in the order.
   final List<ProductDetails> products;
-  final int orderTime; // MillisecondsSinceEpoch
+
+  /// Creation time of the order in millisecondsSinceEpoch.
+  final int orderTime;
+
+  /// The id of the doctor who sent this order.
   final String doctor;
+
+  /// The state of the order (INIT, SENT, SEEN, or DELIVERED).
   final OrderState state;
 
   Order({
@@ -88,5 +96,7 @@ class Order {
   // tmp.addAll({'products': products.map((k, v) => MapEntry(k.toString(), v))});
   // return tmp;
 
-  String get orderID => '${doctor}_$orderTime';
+  String get id => '${doctor}_$orderTime';
+  String get path => '$USERS_COLLECTION/$doctor/$ORDERS_COLLECTION/$id';
+
 }
