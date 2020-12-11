@@ -8,7 +8,7 @@ enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class UserRepository with ChangeNotifier {
   FirebaseAuth _auth;
-  FirebaseUser _user;
+  User _user;
   GoogleSignIn _googleSignIn;
   Status _status = Status.Uninitialized;
   bool keepedLoggedIn = false;
@@ -17,12 +17,12 @@ class UserRepository with ChangeNotifier {
   UserRepository.instance()
       : _auth = FirebaseAuth.instance,
         _googleSignIn = GoogleSignIn() {
-    _auth.onAuthStateChanged.listen(_onAuthStateChanged);
+    _auth.authStateChanges().listen(_onAuthStateChanged);
     _checkIfKeepedLoggedIn();
   }
 
   Status get status => _status;
-  FirebaseUser get user => _user;
+  User get user => _user;
 
   void setStatus(Status newStatus) {
     _status = newStatus;
@@ -60,7 +60,7 @@ class UserRepository with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<FirebaseUser> _handleSignIn() async {
+  Future<User> _handleSignIn() async {
     notifyAfter([
       [
         setStatus,
@@ -77,7 +77,7 @@ class UserRepository with ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    final FirebaseUser user =
+    final User user =
         (await _auth.signInWithCredential(credential)).user;
 
     return user;
@@ -85,13 +85,13 @@ class UserRepository with ChangeNotifier {
 
   Future<bool> signInWithGoogle() async {
     try {
-      final FirebaseUser user = await _handleSignIn();
+      final User user = await _handleSignIn();
 
       print('email: ' + user.email);
       print('username: ' + user.displayName ?? 'null');
       print('phone number: ' + user.providerData?.toString() ?? 'null');
-      print('photoUrl: ' + user.photoUrl ?? 'null');
-      print('providedId: ' + user.providerId ?? 'null');
+      print('photoUrl: ' + user.photoURL ?? 'null');
+      print('providedId: ' + user.providerData.toString() ?? 'null');
       print('matadata: ' + user.metadata?.toString() ?? 'null');
       print('isAnonymous: ' + user.isAnonymous?.toString() ?? 'null');
 
@@ -130,7 +130,7 @@ class UserRepository with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
-  Future<void> _onAuthStateChanged(FirebaseUser firebaseUser) async {
+  Future<void> _onAuthStateChanged(User firebaseUser) async {
     _user = firebaseUser;
     _status =
         firebaseUser == null ? Status.Unauthenticated : Status.Authenticating;
@@ -156,7 +156,7 @@ class UserRepository with ChangeNotifier {
   //     _status = Status.Authenticating;
   //     notifyListeners();
 
-  //     FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+  //     User user = (await _auth.createUserWithEmailAndPassword(
   //             email: email, password: password))
   //         .user;
   //     UserUpdateInfo info = UserUpdateInfo();
