@@ -65,6 +65,7 @@ class HomeDrawer extends StatelessWidget {
                             radius: 40,
                             backgroundImage: CachedNetworkImageProvider(
                               user.photoUrl,
+                              errorListener: () {},
                             ),
                           ),
                         ),

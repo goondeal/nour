@@ -16,8 +16,8 @@ class ProductCard extends StatelessWidget {
     final NumberFormat formatter = NumberFormat.simpleCurrency(
         locale: Localizations.localeOf(context).toString());
     return InkWell(
-      onTap: () =>
-          Provider.of<AppStateModel>(context).addProductToCart(product.id),
+      onTap: () => Provider.of<AppStateModel>(context, listen: false)
+          .addProductToCart(product.id),
       child: Card(
         clipBehavior: Clip.antiAlias,
         //borderOnForeground: false,
