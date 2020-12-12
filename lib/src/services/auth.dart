@@ -10,8 +10,7 @@ class AuthService with ChangeNotifier {
   FirebaseAuth _auth;
   User _user;
   GoogleSignIn _googleSignIn;
-  Status _status = Status.Uninitialized;
-
+  Status _status = Status.Unauthenticated;
 
   // Singleton
   AuthService._()
@@ -68,7 +67,6 @@ class AuthService with ChangeNotifier {
       print('isAnonymous: ' + user.isAnonymous?.toString() ?? 'null');
 
       return true;
-
     } catch (e) {
       print(e.toString());
       return false;
